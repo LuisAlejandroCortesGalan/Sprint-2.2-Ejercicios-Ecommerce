@@ -112,16 +112,16 @@ function cleanCart() {
 
 
 // // Exercise 3
-// function calculateTotal() {
-//     // Calcular el precio total del carrito
-//     let total = cart.reduce((accumulator, item) => accumulator + item.price * (item.quantity || 1), 0);
+function calculateTotal() {
+    // Calcular el precio total del carrito
+    let total = cart.reduce((accumulator, item) => accumulator + item.price * (item.quantity || 1), 0);
 
-//     // Mostrar el total en consola
-//     console.log("Total:", total);
+    // Mostrar el total en consola
+    console.log("Total:", total);
 
-//     // Actualizar el contenido del elemento con id "count_product"
-//     document.getElementById("count_product").innerHTML = `Total: $${total.toFixed(2)}`;
-// }
+    // Actualizar el contenido del elemento con id "count_product"
+    document.getElementById("count_product").innerHTML = `Total: $${total.toFixed(2)}`;
+}
 
 
 // Exercise 4
