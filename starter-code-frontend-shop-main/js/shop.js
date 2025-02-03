@@ -98,12 +98,27 @@ function buy(id) {
     }
     applyPromotionsCart();
     calculateTotal();
+    printCart();
 }
 
 // Exercise 2
 function cleanCart() {
     // Vaciar el carrito
     cart.length = 0; // Esto vacía el array sin eliminar su referencia
+
+    let modal = document.getElementById("cart_list");
+    let mensaje = "";
+    for (let i = 0; i < cart.length; i++) {
+        mensaje += `		<tr>
+                                    <th scope="row"></th>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                    </td>                                 
+                            </tr>`;
+    }
+    modal.innerHTML = mensaje;
+    document.getElementById("total_price").innerHTML = ``;
 
     // Confirmación en la consola
     console.log("Carrito vaciado. Contenido actual del carrito:", cart);
@@ -117,6 +132,7 @@ function calculateTotal() {
 
     // Actualizar el contenido del elemento con id "count_product"
     document.getElementById("count_product").innerHTML = `Total: $${total.toFixed(2)}`;
+
 }
 
 
@@ -142,7 +158,33 @@ function applyPromotionsCart() {
 // Exercise 5
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
+    let modal = document.getElementById("cart_list");
+    let total = document.getElementById("total_price");
+    let totalPrice = 0;
+    let mensaje = "";
+    for (let i = 0; i < cart.length; i++) {
+        // Calcular el subtotal por producto
+        let subtotal = cart[i].subtotalWithDiscount ? cart[i].subtotalWithDiscount * cart[i].quantity : cart[i].price * cart[i].quantity;
+
+        // Sumar el subtotal al total general
+        totalPrice += subtotal;
+
+        // Crear el mensaje HTML para mostrar en el carrito
+        mensaje += `		<tr>
+                                <th scope="row">${cart[i].name}</th>
+                                <td>${cart[i].price}</td>
+                                <td>${cart[i].quantity}</td>
+                                <td>${subtotal.toFixed(2)}</td>                                 
+                            </tr>`;
+    }
+
+    // Mostrar el total calculado en el elemento de precio total
+    total.innerHTML = `$${totalPrice.toFixed(2)}`;
+
+    // Mostrar el mensaje HTML generado en el modal
+    modal.innerHTML = mensaje;
 }
+
 
 
 // ** Nivell II **
