@@ -94,10 +94,9 @@ function buy(id) {
 
 
     for (let i = 0; i < cart.length; i++) {
-        console.log(cart[i].name,  "y cantidad ", cart[i].quantity );
-        
+        console.log(cart[i].name, "y cantidad ", cart[i].quantity);
     }
-
+    applyPromotionsCart();
     calculateTotal();
 }
 
@@ -116,9 +115,6 @@ function calculateTotal() {
     // Calcular el precio total del carrito
     let total = cart.reduce((accumulator, item) => accumulator + item.price * (item.quantity || 1), 0);
 
-    // Mostrar el total en consola
-    console.log("Total:", total);
-
     // Actualizar el contenido del elemento con id "count_product"
     document.getElementById("count_product").innerHTML = `Total: $${total.toFixed(2)}`;
 }
@@ -126,7 +122,21 @@ function calculateTotal() {
 
 // Exercise 4
 function applyPromotionsCart() {
+
     // Apply promotions to each item in the array "cart"
+    for (let i = 0; i < cart.length; i++) {
+        if (cart[i].name === "cooking oil" && cart[i].quantity >= 3 && !cart[i].subtotalWithDiscount) {
+            cart[i].price = cart[i].price - cart[i].price * 0.20;
+            cart[i].subtotalWithDiscount = cart[i].price;
+        }
+        // Aplicar el descuento si groceryQuantity es mayor a 10
+        if (cart[i].name === "Instant cupcake mixture" && cart[i].quantity >= 10 && !cart[i].subtotalWithDiscount) {
+            cart[i].price = cart[i].price - cart[i].price * 0.30;
+            cart[i].subtotalWithDiscount = cart[i].price;
+            console.log("a verer", cart[i].subtotalWithDiscount);
+        }
+    }
+    calculateTotal();
 }
 
 // Exercise 5
