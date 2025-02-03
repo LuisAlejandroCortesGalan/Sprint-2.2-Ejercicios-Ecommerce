@@ -89,6 +89,7 @@ function buy(id) {
     } else {
         productSelected.quantity = 1
         cart.push(productSelected)
+        document.getElementById(id).style.display = "inline";
     }
     console.log(" Producto seleceted", productSelected);
 
@@ -122,6 +123,13 @@ function cleanCart() {
 
     // Confirmación en la consola
     console.log("Carrito vaciado. Contenido actual del carrito:", cart);
+    
+    let sub = document.getElementsByClassName("sub");
+
+    for (let i = 0; i < sub.length; i++) {
+        sub[i].style.display = "none";
+    }
+
 }
 
 
@@ -138,22 +146,39 @@ function calculateTotal() {
 
 // Exercise 4
 function applyPromotionsCart() {
-
     // Apply promotions to each item in the array "cart"
     for (let i = 0; i < cart.length; i++) {
-        if (cart[i].name === "cooking oil" && cart[i].quantity >= 3 && !cart[i].subtotalWithDiscount) {
-            cart[i].price = cart[i].price - cart[i].price * 0.20;
-            cart[i].subtotalWithDiscount = cart[i].price;
+        // Asegúrate de tener un precio original registrado
+        if (!cart[i].originalPrice) {
+            cart[i].originalPrice = cart[i].price; // Guarda el precio original al principio
         }
-        // Aplicar el descuento si groceryQuantity es mayor a 10
-        if (cart[i].name === "Instant cupcake mixture" && cart[i].quantity >= 10 && !cart[i].subtotalWithDiscount) {
-            cart[i].price = cart[i].price - cart[i].price * 0.30;
-            cart[i].subtotalWithDiscount = cart[i].price;
-            console.log("a verer", cart[i].subtotalWithDiscount);
+
+        // Cooking oil: aplicar o revertir el descuento
+        if (cart[i].name === "cooking oil") {
+            if (cart[i].quantity >= 3) {
+                cart[i].subtotalWithDiscount = cart[i].originalPrice * 0.80; // Aplica descuento
+                cart[i].price = cart[i].subtotalWithDiscount;
+            } else {
+                cart[i].subtotalWithDiscount = undefined; // Revertir descuento
+                cart[i].price = cart[i].originalPrice; // Reasigna el precio original
+            }
+        }
+
+        // Instant cupcake mixture: aplicar o revertir el descuento
+        if (cart[i].name === "Instant cupcake mixture") {
+            if (cart[i].quantity >= 10) {
+                cart[i].subtotalWithDiscount = cart[i].originalPrice * 0.70; // Aplica descuento
+                cart[i].price = cart[i].subtotalWithDiscount;
+            } else {
+                cart[i].subtotalWithDiscount = undefined; // Revertir descuento
+                cart[i].price = cart[i].originalPrice; // Reasigna el precio original
+            }
         }
     }
-    calculateTotal();
+
+    calculateTotal(); // Recalcula el total
 }
+
 
 // Exercise 5
 function printCart() {
@@ -162,27 +187,42 @@ function printCart() {
     let total = document.getElementById("total_price");
     let totalPrice = 0;
     let mensaje = "";
-    for (let i = 0; i < cart.length; i++) {
-        // Calcular el subtotal por producto
-        let subtotal = cart[i].subtotalWithDiscount ? cart[i].subtotalWithDiscount * cart[i].quantity : cart[i].price * cart[i].quantity;
 
-        // Sumar el subtotal al total general
-        totalPrice += subtotal;
-
-        // Crear el mensaje HTML para mostrar en el carrito
-        mensaje += `		<tr>
-                                <th scope="row">${cart[i].name}</th>
-                                <td>${cart[i].price}</td>
-                                <td>${cart[i].quantity}</td>
-                                <td>${subtotal.toFixed(2)}</td>                                 
+    if (cart.length > 0) {
+        for (let i = 0; i < cart.length; i++) {
+            // Calcular el subtotal por producto
+            let subtotal = cart[i].subtotalWithDiscount ? cart[i].subtotalWithDiscount * cart[i].quantity : cart[i].price * cart[i].quantity;
+    
+            // Sumar el subtotal al total general
+            totalPrice += subtotal;
+    
+            // Crear el mensaje HTML para mostrar en el carrito
+            mensaje += `		<tr>
+                                    <th scope="row">${cart[i].name}</th>
+                                    <td>${cart[i].price}</td>
+                                    <td>${cart[i].quantity}</td>
+                                    <td>${subtotal.toFixed(2)}</td>                                 
+                                </tr>`;
+        }
+    
+        // Mostrar el total calculado en el elemento de precio total
+        total.innerHTML = `$${totalPrice.toFixed(2)}`;
+    
+        // Mostrar el mensaje HTML generado en el modal
+        modal.innerHTML = mensaje;
+    } else {
+        modal.innerHTML = `<tr>
+                                    <th scope="row"></th>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                    </td>                                 
                             </tr>`;
+        total.innerHTML = ``;
     }
+        
+    
 
-    // Mostrar el total calculado en el elemento de precio total
-    total.innerHTML = `$${totalPrice.toFixed(2)}`;
-
-    // Mostrar el mensaje HTML generado en el modal
-    modal.innerHTML = mensaje;
 }
 
 
@@ -191,7 +231,24 @@ function printCart() {
 
 // Exercise 7
 function removeFromCart(id) {
+    console.log("removing from cart");
+    let index = cart.findIndex(item => item.id === id);
 
+    if (cart[index].quantity > 0) {
+        cart[index].quantity -= 1
+        console.log("borrado del cart el indice:", index, "Nueva cantidad", cart[index].quantity);
+        applyPromotionsCart();
+        calculateTotal();
+        printCart();
+    }
+    if(cart[index].quantity === 0){
+        let borrado = cart.splice(index, 1);
+        console.log("borrado del cart el indice:", index, "borramos:", borrado);
+        document.getElementById(id).style.display = "none";
+        applyPromotionsCart();
+        calculateTotal();
+        printCart();
+    }
 }
 
 function open_modal() {
