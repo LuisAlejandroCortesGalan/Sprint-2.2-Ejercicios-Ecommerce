@@ -64,6 +64,14 @@
   --bs-body-bg: #fff;
 }
 
+.stick {
+  position: sticky !important;
+  top: 0; /* Fija el header en la parte superior */
+  z-index: 1020; /* Asegúrate de que esté encima de otros elementos */
+  background-color: #f8f9fa; /* Mantén el color de fondo para evitar transparencia */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: agrega un efecto de sombra */
+}
+
 *,
 *::before,
 *::after {
