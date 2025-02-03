@@ -102,13 +102,13 @@ function buy(id) {
 }
 
 // Exercise 2
-// function cleanCart() {
-//     // Vaciar el carrito
-//     cart.length = 0; // Esto vacía el array sin eliminar su referencia
+function cleanCart() {
+    // Vaciar el carrito
+    cart.length = 0; // Esto vacía el array sin eliminar su referencia
 
-//     // Confirmación en la consola
-//     console.log("Carrito vaciado. Contenido actual del carrito:", cart);
-// }
+    // Confirmación en la consola
+    console.log("Carrito vaciado. Contenido actual del carrito:", cart);
+}
 
 
 // // Exercise 3
